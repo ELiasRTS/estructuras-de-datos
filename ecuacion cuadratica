@@ -1,0 +1,40 @@
+/******************************************************************************
+..Programa de ecuacion cuadratica...
+*******************************************************************************/
+#include <iostream>
+#include <cmath> // Necesario para la función sqrt()
+using namespace std;
+
+int main() {
+    double a, b, c;
+
+    cout << "Ingrese el coeficiente a: ";
+    cin >> a;
+
+    cout << "Ingrese el coeficiente b: ";
+    cin >> b;
+
+    cout << "Ingrese el coeficiente c: ";
+    cin >> c;
+
+    double discriminante = b * b - 4 * a * c;
+
+    if (discriminante > 0) {
+        double raiz1 = (-b + sqrt(discriminante)) / (2 * a);
+        double raiz2 = (-b - sqrt(discriminante)) / (2 * a);
+
+        cout << "Las raíces reales son: " << raiz1 << " y " << raiz2 << endl;
+    } else if (discriminante == 0) {
+        // Una raíz real (raíz doble)
+        double raiz = -b / (2 * a);
+        
+        cout << "La raíz doble es: " << raiz << endl;
+    } else {
+        double parteReal = -b / (2 * a);
+        double parteImaginaria = sqrt(-discriminante) / (2 * a);
+
+        cout << "Las raíces son complejas: " << parteReal << " + " << parteImaginaria << "i y " << parteReal << " - " << parteImaginaria << "i" << endl;
+    }
+
+    return 0;
+}
