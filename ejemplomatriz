@@ -1,0 +1,45 @@
+#include "Matriz.h"
+#include <iostream>
+#define MAX 20
+using namespace std;
+int main(){
+	int A[MAX][MAX], B[MAX][MAX], c[MAX][MAX], fil, col, op;
+	double prom;
+	Matriz mat;
+	cout << "Cantidad de filas" << endl; 
+	do {
+		cin >> fil;
+	} while (fil<0 && fil>MAX);
+	cout << "Cantidad de columnas" << endl; 
+	do {
+		cin >> col;
+	} while (col<0 && col>MAX);
+	do {
+		cout << "\t Menu\n";
+		cout << "\t ====\n\n";
+		cout << "(1) Cargar Matriz\n";
+		cout << "(2) Mostrar Matriz\n";
+		cout << "(3) Promedio Matriz\n";
+		cout << "(4) Mayor Matriz\n";
+		cout << "(5) Suma de matrices\n";
+		cout << "(0) Salir\n";
+		cout << "Opcion:"; cin >> op;
+		switch (op) {
+		case 1: mat.cargar_matriz(fil, col, A, B);
+			break;
+		case 2: mat.mostrar_matriz(fil, col, A, B);
+			break;
+		case 3: cout<<"promedio="<< mat.promedio_matriz(fil, col, A)<<endl;
+			break;
+		case 4:cout<<"Mayor valor:"<< mat.mayor_valor(fil, col, A)<<endl;
+			break;
+		case 5: cout << "La suma de las matrices dio:\n";
+			mat.suma_matriz(fil, col, A, B, c);
+			break;
+		case 0: cout << "Saliendo..." << endl;
+			break;
+		default: cout << "Opcion incorrecta" << endl;
+			break;
+		}
+	} while (op != 0);
+}
