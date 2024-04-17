@@ -1,0 +1,168 @@
+class Nodo:
+    def __init__(self, dato):
+        self.dato = dato
+        self.siguiente = None
+
+class ListaEnlazada:
+    def __init__(self):
+        self.cabeza = None
+
+    def insertar_al_principio(self, dato):
+        nuevo_nodo = Nodo(dato)
+        nuevo_nodo.siguiente = self.cabeza
+        self.cabeza = nuevo_nodo
+
+    def insertar_al_final(self, dato):
+        nuevo_nodo = Nodo(dato)
+        if self.cabeza is None:
+            self.cabeza = nuevo_nodo
+            return
+        actual = self.cabeza
+        while actual.siguiente:
+            actual = actual.siguiente
+        actual.siguiente = nuevo_nodo
+
+    def insertar_en_posicion(self, dato, posicion):
+        nuevo_nodo = Nodo(dato)
+        if posicion == 0:
+            nuevo_nodo.siguiente = self.cabeza
+            self.cabeza = nuevo_nodo
+            return
+        actual = self.cabeza
+        contador = 0
+        while actual and contador < posicion - 1:
+            actual = actual.siguiente
+            contador += 1
+        if not actual:
+            print("La lista es más corta que la posición especificada.")
+            return
+        nuevo_nodo.siguiente = actual.siguiente
+        actual.siguiente = nuevo_nodo
+
+    def imprimir_lista(self):
+        actual = self.cabeza
+        while actual:
+            print(actual.dato, end=" -> ")
+            actual = actual.siguiente
+        print("None")
+    
+    def esta_vacia(self):
+        return self.cabeza is None
+    
+    def esta_llena(self):
+        return False
+        # En Python, una lista enlazada nunca está "llena" en el sentido tradicional,
+        # pero puedes agregar una verificación si deseas controlar un tamaño máximo.
+
+    def sacar_primero(self):
+        if not self.cabeza:
+            print("La lista está vacía.")
+            return
+        dato = self.cabeza.dato
+        self.cabeza = self.cabeza.siguiente
+        return dato
+
+    def sacar_ultimo(self):
+        if not self.cabeza:
+            print("La lista está vacía.")
+            return
+        if not self.cabeza.siguiente:
+            dato = self.cabeza.dato
+            self.cabeza = None
+            return dato
+        actual = self.cabeza
+        while actual.siguiente.siguiente:
+            actual = actual.siguiente
+        dato = actual.siguiente.dato
+        actual.siguiente = None
+        return dato
+
+    def sacar_en_posicion(self, posicion):
+        if not self.cabeza:
+            print("La lista está vacía.")
+            return
+        if posicion == 0:
+            dato = self.cabeza.dato
+            self.cabeza = self.cabeza.siguiente
+            return dato
+        actual = self.cabeza
+        contador = 0
+        while actual and contador < posicion - 1:
+            actual = actual.siguiente
+            contador += 1
+        if not actual or not actual.siguiente:
+            print("La lista es más corta que la posición especificada.")
+            return
+        dato = actual.siguiente.dato
+        actual.siguiente = actual.siguiente.siguiente
+        return dato
+
+    def ingresar_lista(self, lista):
+        for dato in lista:
+            self.insertar_al_final(dato)
+
+# Función para mostrar el menú y manejar las opciones
+def mostrar_menu():
+    print("1. Insertar dato al principio")
+    print("2. Insertar dato al final")
+    print("3. Insertar dato en posición específica")
+    print("4. Imprimir lista")
+    print("5. Verificar si la lista está vacía")
+    print("6. Verificar si la lista está llena")
+    print("7. Sacar primer elemento")
+    print("8. Sacar último elemento")
+    print("9. Sacar elemento en posición específica")
+    print("10. Ingresar lista")
+    print("11. Salir")
+
+lista = ListaEnlazada()
+
+while True:
+    mostrar_menu()
+    opcion = input("Ingrese el número de la opción que desea: ")
+
+    if opcion == "1":
+        dato = input("Ingrese el dato que desea agregar: ")
+        lista.insertar_al_principio(dato)
+    elif opcion == "2":
+        dato = input("Ingrese el dato que desea agregar: ")
+        lista.insertar_al_final(dato)
+    elif opcion == "3":
+        dato = input("Ingrese el dato que desea agregar: ")
+        posicion = int(input("Ingrese la posición en la que desea insertar el dato: "))
+        lista.insertar_en_posicion(dato, posicion)
+    elif opcion == "4":
+        print("La lista es:")
+        lista.imprimir_lista()
+    elif opcion == "5":
+        if lista.esta_vacia():
+            print("La lista está vacía.")
+        else:
+            print("La lista no está vacía.")
+    elif opcion == "6":
+        if lista.esta_llena():
+            print("La lista está llena.")
+        else:
+            print("La lista no está llena.")
+    elif opcion == "7":
+        dato = lista.sacar_primero()
+        if dato is not None:
+            print("Se sacó el elemento:", dato)
+    elif opcion == "8":
+        dato = lista.sacar_ultimo()
+        if dato is not None:
+            print("Se sacó el elemento:", dato)
+    elif opcion == "9":
+        posicion = int(input("Ingrese la posición del elemento que desea sacar: "))
+        dato = lista.sacar_en_posicion(posicion)
+        if dato is not None:
+            print("Se sacó el elemento:", dato)
+    elif opcion == "10":
+        lista_nueva = input("Ingrese la lista separada por espacios: ").split()
+        lista.ingresar_lista(lista_nueva)
+        print("Lista ingresada correctamente.")
+    elif opcion == "11":
+        print("Saliendo del programa.")
+        break
+    else:
+        print("Opción no válida. Por favor, ingrese un número válido.")
