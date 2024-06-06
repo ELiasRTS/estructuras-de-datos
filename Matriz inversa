@@ -1,0 +1,126 @@
+#include <iostream>
+#include <vector>
+#include <stdexcept>
+
+using namespace std;
+
+class Matriz {
+private:
+    vector<vector<double>> datos;
+    int filas, columnas;
+
+public:
+    Matriz(int f, int c) : filas(f), columnas(c), datos(f, vector<double>(c)) {}
+
+    void ingresarDatos() {
+        cout << "Ingrese los elementos de la matriz:\n";
+        for (int i = 0; i < filas; ++i)
+            for (int j = 0; j < columnas; ++j)
+                cin >> datos[i][j];
+    }
+
+    void mostrar() const {
+        for (int i = 0; i < filas; ++i) {
+            for (int j = 0; j < columnas; ++j)
+                cout << datos[i][j] << " ";
+            cout << endl;
+        }
+    }
+
+    Matriz inversa() const {
+        if (filas != columnas)
+            throw invalid_argument("La matriz no es cuadrada, no se puede calcular la inversa.");
+
+        int n = filas;
+        Matriz mat(n, n);
+        Matriz inv(n, n);
+
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                mat.datos[i][j] = datos[i][j];
+                inv.datos[i][j] = (i == j) ? 1 : 0;
+            }
+        }
+
+        for (int i = 0; i < n; ++i) {
+            double diag = mat.datos[i][i];
+            if (diag == 0)
+                throw runtime_error("La matriz no es invertible.");
+
+            for (int j = 0; j < n; ++j) {
+                mat.datos[i][j] /= diag;
+                inv.datos[i][j] /= diag;
+            }
+
+            for (int k = 0; k < n; ++k) {
+                if (k != i) {
+                    double factor = mat.datos[k][i];
+                    for (int j = 0; j < n; ++j) {
+                        mat.datos[k][j] -= factor * mat.datos[i][j];
+                        inv.datos[k][j] -= factor * inv.datos[i][j];
+                    }
+                }
+            }
+        }
+
+        return inv;
+    }
+};
+
+void mostrarMenu() {
+    cout << "Menú Principal\n";
+    cout << "1. Ingresar Matriz\n";
+    cout << "2. Mostrar Matriz\n";
+    cout << "3. Calcular Inversa\n";
+    cout << "4. Salir\n";
+}
+
+int main() {
+    Matriz* matriz = nullptr;
+    int opcion;
+
+    do {
+        mostrarMenu();
+        cout << "Seleccione una opción: ";
+        cin >> opcion;
+
+        switch (opcion) {
+        case 1: {
+            int filas, columnas;
+            cout << "Ingrese el número de filas y columnas: ";
+            cin >> filas >> columnas;
+            delete matriz;
+            matriz = new Matriz(filas, columnas);
+            matriz->ingresarDatos();
+            break;
+        }
+        case 2:
+            if (matriz)
+                matriz->mostrar();
+            else
+                cout << "Primero ingrese una matriz.\n";
+            break;
+        case 3:
+            if (matriz) {
+                try {
+                    Matriz inversa = matriz->inversa();
+                    cout << "La matriz inversa es:\n";
+                    inversa.mostrar();
+                } catch (const exception& e) {
+                    cerr << e.what() << endl;
+                }
+            } else {
+                cout << "Primero ingrese una matriz.\n";
+            }
+            break;
+        case 4:
+            cout << "Saliendo del programa.\n";
+            break;
+        default:
+            cout << "Opción no válida. Intente nuevamente.\n";
+        }
+    } while (opcion != 4);
+
+    delete matriz;
+    return 0;
+}
