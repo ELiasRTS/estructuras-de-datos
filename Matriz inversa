@@ -14,9 +14,12 @@ public:
 
     void ingresarDatos() {
         cout << "Ingrese los elementos de la matriz:\n";
-        for (int i = 0; i < filas; ++i)
-            for (int j = 0; j < columnas; ++j)
+        for (int i = 0; i < filas; ++i) {
+            for (int j = 0; j < columnas; ++j) {
+                cout << "Elemento [" << i + 1 << "][" << j + 1 << "]: ";
                 cin >> datos[i][j];
+            }
+        }
     }
 
     void mostrar() const {
@@ -27,7 +30,7 @@ public:
         }
     }
 
-    Matriz inversa() const {
+    Matriz calcularInversa() const {
         if (filas != columnas)
             throw invalid_argument("La matriz no es cuadrada, no se puede calcular la inversa.");
 
@@ -71,7 +74,7 @@ void mostrarMenu() {
     cout << "Menú Principal\n";
     cout << "1. Ingresar Matriz\n";
     cout << "2. Mostrar Matriz\n";
-    cout << "3. Calcular Inversa\n";
+    cout << "3. Mostrar Inversa de la Matriz\n";
     cout << "4. Salir\n";
 }
 
@@ -89,22 +92,24 @@ int main() {
             int filas, columnas;
             cout << "Ingrese el número de filas y columnas: ";
             cin >> filas >> columnas;
-            delete matriz;
+            delete matriz;  // Eliminar la matriz anterior si existe
             matriz = new Matriz(filas, columnas);
             matriz->ingresarDatos();
             break;
         }
         case 2:
-            if (matriz)
+            if (matriz) {
+                cout << "La matriz ingresada es:\n";
                 matriz->mostrar();
-            else
+            } else {
                 cout << "Primero ingrese una matriz.\n";
+            }
             break;
         case 3:
             if (matriz) {
                 try {
-                    Matriz inversa = matriz->inversa();
-                    cout << "La matriz inversa es:\n";
+                    Matriz inversa = matriz->calcularInversa();
+                    cout << "La inversa de la matriz es:\n";
                     inversa.mostrar();
                 } catch (const exception& e) {
                     cerr << e.what() << endl;
@@ -121,6 +126,6 @@ int main() {
         }
     } while (opcion != 4);
 
-    delete matriz;
+    delete matriz;  
     return 0;
 }
